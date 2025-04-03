@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 
 class Room
@@ -53,8 +54,43 @@ class Hotel
     }
     public void ShowAvailableRooms()
     {
-        var availableRooms = Rooms.Where(r => r.IsAviailable);
+        var availableRooms = Rooms.Where(r => r.IsAvailable);
+
+        Console.WriteLine("Dostępne pokoje");
+        foreach (var room in availableRooms)
+        {
+            Console.WriteLine(room.RoomNumber);
+        }
     }
+    public void MakeReservation(int roomNumber, Customer customer, DateTime checkIn, DateTime checkOut)
+    {
+        var room = Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber && r.IsAvailable);
+        if (room != null)
+        {
+            var reservation = new Reservation(room, customer, checkIn, checkOut);
+            Reservations.Add(reservation);
+            Console.WriteLine($"Rezerwacja potwierdzona dla {customer.Name} w pokoju {roomNumber}.");
+        }
+        else
+        {
+            Console.WriteLine("Pokój nie jest dostępny");
+        }
+    }
+    public void CancelReservation(int roomNumber)
+    {
+        var reservation = Reservations.FirstOrDefault(r => r.Room.RoomNumber == roomNumber);
+        if (reservation != null)
+        {
+            reservation.Room.IsAvailable= true;
+            Reservations.Remove(reservation);
+            Console.WriteLine($"Rezerwacja dla pokoju {roomNumber} została anulowana");
+        }
+        else
+        {
+            Console.WriteLine("Nie znaleziono rezerwacji dla tego pokoju");
+        }
+    }   
+
 }
 
 class Program
@@ -64,7 +100,7 @@ class Program
         Hotel hotel = new Hotel(5);
         Customer customer1 = new Customer("Jan Kowalski", 1);
 
-        hotel.ShowAvailablerRooms();
+        hotel.ShowAvailableRooms();
         hotel.MakeReservation(2, customer1, DateTime.Now, DateTime.Now.AddDays(2));
         hotel.ShowAvailableRooms();
         hotel.CancelReservation(2);

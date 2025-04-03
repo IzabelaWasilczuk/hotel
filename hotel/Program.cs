@@ -45,9 +45,9 @@ class Hotel
     private List<Room> Rooms = new List<Room>();
     private List<Reservation> Reservations = new List<Reservation>();
 
-    public Hotel (int roomCouunt)
+    public Hotel(int roomCouunt)
     {
-        for (int i = 1; i<= roomCouunt; i++)
+        for (int i = 1; i <= roomCouunt; i++)
         {
             Rooms.Add(new Room(i));
         }
@@ -81,7 +81,7 @@ class Hotel
         var reservation = Reservations.FirstOrDefault(r => r.Room.RoomNumber == roomNumber);
         if (reservation != null)
         {
-            reservation.Room.IsAvailable= true;
+            reservation.Room.IsAvailable = true;
             Reservations.Remove(reservation);
             Console.WriteLine($"Rezerwacja dla pokoju {roomNumber} została anulowana");
         }
@@ -89,7 +89,7 @@ class Hotel
         {
             Console.WriteLine("Nie znaleziono rezerwacji dla tego pokoju");
         }
-    }   
+    }
 
 }
 
@@ -105,5 +105,30 @@ class Program
         hotel.ShowAvailableRooms();
         hotel.CancelReservation(2);
         hotel.ShowAvailableRooms();
+
+        while (true)
+        {
+            Console.WriteLine("1. Pokaż dostępne pokoje");
+            Console.WriteLine("2. Zarezerwuj pokój");
+            Console.WriteLine("3. Anuluj rezerwację");
+            int choice = Convert.ToInt16(Console.ReadLine());
+            switch (choice)
+            {
+                case 1:
+                    hotel.ShowAvailableRooms();
+                    break;
+                case 2:
+                    Console.WriteLine("Podaj numer pokoju: ");
+                    int roomNumber = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Podaj imię i nazwisko: ");
+                    string name = Console.ReadLine();
+                    Customer newCustomer = new Customer(name, new Random().Next(1000));
+                    hotel.MakeReservation(roomNumber, newCustomer, DateTime.Now, DateTime.Now.AddDays(2));
+                    break;
+                case 3:
+                    Console.WriteLine("Podaj numer pokoju do anulowania rezerwacji: ");
+
+            }
+        }
     }
 }

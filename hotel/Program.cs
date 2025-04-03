@@ -127,6 +127,12 @@ class Program
                     break;
                 case 3:
                     Console.WriteLine("Podaj numer pokoju do anulowania rezerwacji: ");
+                    int cancelRoomNumber = int.Parse(Console.ReadLine());
+                    hotel.CancelReservation(cancelRoomNumber);
+                    break;
+                default:
+                    Console.WriteLine("Nieprawidłowa opcja, spróbuj ponownie");
+                    break;
 
             }
         }
